@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Include lazyfrosch.golang
+      ansible.builtin.include_role:
+        name: lazyfrosch.golang

@@ -1,0 +1,44 @@
+- name: Determine parts of the download URL
+  ansible.builtin.set_fact:
+    _go_os: "{{ ansible_system | lower }}"
+    _go_arch: "{{ ansible_architecture | replace('x86_64', 'amd64') | replace('i386', '386') }}"
+    _download_version: "{{ _latest_version if _latest_version is defined else golang_version }}"
+
+- name: Ensure download path {{ golang_download_path }}
+  ansible.builtin.file:  # noqa risky-file-permissions
+    path: "{{ golang_download_path }}"
+    state: directory
+
+- name: Download the go tarball
+  ansible.builtin.get_url:
+    url: "{{ golang_download_source }}/go{{ _download_version }}.{{ _go_os }}-{{ _go_arch }}.tar.gz"
+    dest: "{{ golang_download_path }}/go{{ _download_version }}.{{ _go_os }}-{{ _go_arch }}.tar.gz"
+    mode: '0644'
+    checksum: >-
+      {{
+      'sha256:' + (
+        _latest_version_info.files
+        | selectattr('os', '==', _go_os)
+        | selectattr('arch', '==', _go_arch) | first
+      ).sha256
+      if _latest_version_info is defined else None
+      }}
+
+- name: Ensure extract location
+  ansible.builtin.file:
+    path: "{{ _install_target }}/go{{ _download_version }}"
+    state: directory
+    mode: '0755'
+
+- name: Unarchive the go tarball
+  ansible.builtin.unarchive:
+    src: "{{ golang_download_path }}/go{{ _download_version }}.{{ _go_os }}-{{ _go_arch }}.tar.gz"
+    dest: "{{ _install_target }}/go{{ _download_version }}"
+    remote_src: true
+    extra_opts: --strip-components=1
+
+- name: Set symlink to current installation
+  ansible.builtin.file:
+    path: "{{ _install_target }}/go"
+    state: link
+    src: "go{{ _download_version }}"

@@ -1,0 +1,23 @@
+name: Ansible Molecule
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # strategy:
+    #   matrix:
+    #     dist:
+    #       - debian11
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Ansible Molecule
+        uses: gofrolist/molecule-action@v2.2.20

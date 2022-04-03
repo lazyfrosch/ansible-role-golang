@@ -1,0 +1,11 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Try to run go
+      ansible.builtin.command: "{{ golang_installation_system }}/go/bin/go version"
+      changed_when: false

@@ -1,0 +1,8 @@
+---
+golang_version: latest
+
+golang_download_source: https://go.dev/dl
+
+golang_download_path: "{{ ansible_user_dir }}/Downloads"
+golang_installation_user: '{{ ansible_user_dir }}/tools'
+golang_installation_system: '/opt'

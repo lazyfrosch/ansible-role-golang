@@ -1,0 +1,19 @@
+galaxy_info:
+  role_name: golang
+  namespace: lazyfrosch
+  author: Markus Frosch
+  description: Install golang for development purposes in user home or /opt
+  company: Lazyfrosch.de
+
+  issue_tracker_url: https://github.com/lazyfrosch/ansible-role-golang/issues
+  license: GPL-3.0
+
+  min_ansible_version: "2.9"
+
+  platforms:
+    - name: Debian
+    - name: Ubuntu
+
+  galaxy_tags:
+    - golang
+    - developer
